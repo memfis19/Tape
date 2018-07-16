@@ -1,0 +1,170 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'jacoco'
+
+buildscript {
+    ext.kotlin_version = '1.2.51'
+    ext.android_gradle_version = '3.1.3'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
+        maven { url "http://repo1.maven.org/maven2/" }
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+def libraryGroupId = 'me.surzhenko.rodion'
+def libraryArtifactId = 'tape'
+def libraryVersion = '1.0.0'
+
+group libraryGroupId
+version libraryVersion
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://maven.google.com"
+    }
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin/'
+    test.java.srcDirs += 'src/test/kotlin/'
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
+    compile "com.android.tools.build:gradle:$android_gradle_version"
+
+    compile 'org.simpleframework:simple-xml:2.7.1'
+    compile 'batik:batik-svggen:1.6-1'
+
+    compile gradleApi()
+    testCompile "junit:junit:4.12"
+}
+
+task codeCoverageReport(type: JacocoReport) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        xml.destination "${buildDir}/reports/jacoco/report.xml"
+        html.enabled false
+        csv.enabled false
+    }
+}
+
+codeCoverageReport.dependsOn {
+    subprojects*.test
+}
+
+task generateSourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+
+task generateJavadocs(type: Javadoc) {
+    failOnError false
+    source = sourceSets.main.java.srcDirs
+}
+
+task generateJavadocsJar(type: Jar) {
+    from generateJavadocs.destinationDir
+    classifier 'javadoc'
+}
+
+generateJavadocsJar.dependsOn generateJavadocs
+
+artifacts {
+    archives generateSourcesJar
+    archives generateJavadocsJar
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The MIT License"
+            url "https://opensource.org/licenses/MIT"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "memfis19"
+            name "Rodion Surzhenko"
+            email "rodion.surzhenko@hotmail.com"
+        }
+    }
+
+    scm {
+        url "https://github.com/memfis19/Tape"
+    }
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            groupId libraryGroupId
+            artifactId libraryArtifactId
+            version libraryVersion
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Plugin for android app to modify app icon.')
+                root.appendNode('name', 'Tape')
+                root.appendNode('url', 'https://github.com/memfis19/Tap')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    user = properties.getProperty('bintray.user')
+    key = properties.getProperty('bintray.apikey')
+    configurations = ['archives']
+    pkg {
+        repo = 'io.github.memfis19'
+        name = 'tape'
+        userOrg = 'm-e-m-f-i-s'
+        desc = 'Plugin for android app to modify app icon.'
+        licenses = ['MIT']
+        labels = ['android', 'build', 'config', 'ribbon', 'stripe', 'tape']
+        websiteUrl = 'https://github.com/memfis19/Tape'
+        issueTrackerUrl = 'https://github.com/memfis19/Tape/issues'
+        vcsUrl = 'https://github.com/memfis19/Tape.git'
+        version {
+            name = libraryVersion
+            vcsTag = libraryVersion
+            desc = 'Initial deploy.'
+            released = new Date()
+        }
+    }
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
