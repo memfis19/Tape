@@ -8,7 +8,7 @@ Plugin for android app to modify app icon. Supports raster images usually png-s 
 2. Apply plugin: ```apply plugin: 'icon-tape'```
 
 ## How to use?
-To start using you should add next extension section to the your app ```build.gradle``` script, i.e.:
+To start using you should add next extension section to your app ```build.gradle``` script, i.e.:
 ```
 tape {
     stripeColor = 0xCC991155
@@ -18,7 +18,10 @@ tape {
     buildTypes = ["debug"]
 }
 ```
-Please notice that color supports transparency so please pass alpa value too. 
+Please notice that color supports transparency so please pass alpha in color values too. 
+
+### Sample
+<img src="https://github.com/memfis19/Tape/blob/master/test/ic_launcher.png"/> <img src="https://github.com/memfis19/Tape/blob/master/raster.png"/>
 
 ## Bugs and Feedback
 For bugs, feature requests, and discussion please use <a href="https://github.com/memfis19/Tape/issues">GitHub Issues</a>.
