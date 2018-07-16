@@ -18,7 +18,7 @@ tape {
     buildTypes = ["debug"]
 }
 ```
-Please notice that color supports transparency so please pass alpha value too. 
+Please notice that color supports transparency so please pass alpha in color values too. 
 
 ### Sample
 <img src="https://github.com/memfis19/Tape/blob/master/test/ic_launcher.png"/> <img src="https://github.com/memfis19/Tape/blob/master/raster.png"/>
