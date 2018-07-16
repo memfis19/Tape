@@ -12,8 +12,8 @@ class IconDrawerTest {
         val drawer = RasterIconDrawer(File("test/ic_launcher.png"))
         drawer.drawOverIcon(TapeSettings.DEFAULT.apply {
             text = arrayOf("Prod", "Debug")
-            stripeColor = 0x77991155
-            textColor = 0x55DDAA11
+            stripeColor = 0x99991155.toInt()
+            textColor = 0xFFDDAA11.toInt()
         }, File("raster.png").apply { if (!exists()) createNewFile() })
     }
 
@@ -22,8 +22,8 @@ class IconDrawerTest {
         val drawer = VectorIconDrawer(File("test/ic_app_icon_72.xml"))
         drawer.drawOverIcon(TapeSettings.DEFAULT.apply {
             text = arrayOf("Prod", "Debug")
-            stripeColor = 0x77991155
-            textColor = 0x55DDAA11
+            stripeColor = 0x99991155.toInt()
+            textColor = 0x99DDAA11.toInt()
         }, File("vector.xml").apply { if (!exists()) createNewFile() })
     }
 
