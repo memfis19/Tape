@@ -32,21 +32,18 @@ class IconProcessor {
         project.afterEvaluate { evaluatedProject ->
 
             if (!ribbonSettings.enabled) return@afterEvaluate
-            val android = project.extensions.findByType(AppExtension::class.java)
-
-            val appExtensions = evaluatedProject.extensions.findByType(AppExtension::class.java)
 
             Log.i(TapePlugin.TAG, "$ribbonSettings")
 
-            appExtensions?.applicationVariants?.all { applicationVariant ->
-
+            val appExtension = evaluatedProject.extensions.findByType(AppExtension::class.java)
+            appExtension?.applicationVariants?.all { applicationVariant ->
 
                 if (!ribbonSettings.buildTypes.contains(applicationVariant.buildType.name)) {
                     Log.w(TapePlugin.TAG, "Build type '${applicationVariant.buildType.name}' does not supported.")
                 }
 
-                val sources = android?.sourceSets?.asMap?.values?.map { it.res.srcDirs }?.flatMap { it }
-                val existedManifestFiles = android?.sourceSets?.map { it.manifest.srcFile }?.filter { it.exists() }
+                val sources = appExtension.sourceSets?.asMap?.values?.map { it.res.srcDirs }?.flatMap { it }
+                val existedManifestFiles = appExtension.sourceSets?.map { it.manifest.srcFile }?.filter { it.exists() }
                 val applicationIconsFiles = mutableListOf<File>()
 
                 existedManifestFiles?.forEach { manifestFile ->
@@ -57,7 +54,7 @@ class IconProcessor {
                 }
 
                 variantMap[applicationVariant.name] = createResDir(project, applicationVariant).apply {
-                    android?.sourceSets?.findByName(applicationVariant.name)?.res?.srcDir(this)
+                    appExtension.sourceSets?.findByName(applicationVariant.name)?.res?.srcDir(this)
                 }
 
                 applicationVariant.outputs.forEach { output ->
