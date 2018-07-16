@@ -61,7 +61,7 @@ class IconProcessor {
                     if (ribbonSettings.buildTypes.contains(applicationVariant.buildType.name)) {
                         output.processResources.doFirst { task ->
                             (task as? LinkApplicationAndroidResourcesTask)?.let { processAndroidResource ->
-                                Log.e(TapePlugin.TAG, "Draw for variant: ${processAndroidResource.variantName}")
+                                Log.i(TapePlugin.TAG, "Draw for variant: ${processAndroidResource.variantName}")
 
                                 variantMap[processAndroidResource.variantName]?.also {
                                     applicationIconsFiles.forEach { iconFile -> draw(processAndroidResource.variantName, iconFile, createOutputFile(iconFile, it), ribbonSettings) }
