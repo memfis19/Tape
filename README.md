@@ -1,7 +1,7 @@
 # Tape
 [ ![Download](https://api.bintray.com/packages/m-e-m-f-i-s/io.github.memfis19/tape/images/download.svg) ](https://bintray.com/m-e-m-f-i-s/io.github.memfis19/tape/_latestVersion)
 
-Plugin for android app to modify app icon. Supports raster images usually png-s and vector images (using <a href='https://xmlgraphics.apache.org/batik/'>Apache Batik</a>).
+Plugin for android app to modify app icon. Useful for developing purposes i.e. to show deployment kind, build type or version. Supports raster images usually png-s and vector images (using <a href='https://xmlgraphics.apache.org/batik/'>Apache Batik</a>).
 
 ## How to add?
 1. Add buildscript dependency: ```classpath 'me.surzhenko.rodion:tape:1.0.0'```
@@ -30,7 +30,7 @@ For bugs, feature requests, and discussion please use <a href="https://github.co
 
 ###### MIT License
 
-###### Copyright (c) 2016 Rodion Surzhenko
+###### Copyright (c) 2018 Rodion Surzhenko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
