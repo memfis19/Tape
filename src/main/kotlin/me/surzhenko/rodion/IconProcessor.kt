@@ -12,7 +12,7 @@ import me.surzhenko.rodion.internal.parser.XmlProcessor
 import me.surzhenko.rodion.internal.utils.Log
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
-import org.gradle.api.internal.file.collections.SimpleFileCollection
+import org.gradle.api.internal.file.collections.ImmutableFileCollection
 import java.io.File
 
 class IconProcessor {
@@ -42,13 +42,14 @@ class IconProcessor {
                     Log.w(TapePlugin.TAG, "Build type '${applicationVariant.buildType.name}' does not supported.")
                 }
 
-                val sources = appExtension.sourceSets?.asMap?.values?.map { it.res.srcDirs }?.flatMap { it }
+                val sources = appExtension.sourceSets?.asMap?.values?.map { it.res.srcDirs }?.flatten()
                 val existedManifestFiles = appExtension.sourceSets?.map { it.manifest.srcFile }?.filter { it.exists() }
                 val applicationIconsFiles = mutableListOf<File>()
 
                 existedManifestFiles?.forEach { manifestFile ->
                     getIconName(manifestFile)?.let { iconFileName ->
-                        val resDir = SimpleFileCollection(sources?.toMutableList()?.also { it.add(manifestFile.parentFile.parentFile) })
+                        val resDir = ImmutableFileCollection.of(sources?.toMutableList()?.also { it.add(manifestFile.parentFile.parentFile) }
+                                ?: emptyList())
                         applicationIconsFiles.addAll(findIcons(iconFileName, resDir as FileCollection))
                     }
                 }
@@ -59,7 +60,7 @@ class IconProcessor {
 
                 applicationVariant.outputs.forEach { output ->
                     if (ribbonSettings.buildTypes.contains(applicationVariant.buildType.name)) {
-                        output.processResources.doFirst { task ->
+                        output.processResourcesProvider.get().doFirst { task ->
                             (task as? LinkApplicationAndroidResourcesTask)?.let { processAndroidResource ->
                                 Log.i(TapePlugin.TAG, "Draw for variant: ${processAndroidResource.variantName}")
 
@@ -70,7 +71,6 @@ class IconProcessor {
                         }
                     }
                 }
-
             }
         }
     }
@@ -132,7 +132,7 @@ class IconProcessor {
 
     internal fun findFileByName(where: FileCollection, filename: String, action: (file: File) -> Unit) {
         where.files.forEach { file ->
-            if (file.isDirectory) findFileByName(SimpleFileCollection(file.listFiles()?.asList()
+            if (file.isDirectory) findFileByName(ImmutableFileCollection.of(file.listFiles()?.asList()
                     ?: emptyList()), filename, action)
             else if (file.nameWithoutExtension == filename) action.invoke(file)
         }

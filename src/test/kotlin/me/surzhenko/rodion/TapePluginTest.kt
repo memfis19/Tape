@@ -1,6 +1,6 @@
 package me.surzhenko.rodion
 
-import org.gradle.api.internal.file.collections.SimpleFileCollection
+import org.gradle.api.internal.file.collections.ImmutableFileCollection
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert
 import org.junit.Test
@@ -23,7 +23,7 @@ class TapePluginTest {
     @Test
     fun findIconFile() {
         val icons = mutableListOf<File>()
-        IconProcessor().findFileByName(SimpleFileCollection(listOf(File("test/src"))), "ic_launcher") {
+        IconProcessor().findFileByName(ImmutableFileCollection.of(listOf(File("test/src"))), "ic_launcher") {
             icons.add(it)
         }
         Assert.assertTrue(icons.isNotEmpty())
