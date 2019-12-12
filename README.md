@@ -4,7 +4,7 @@
 Plugin for android app to modify app icon. Useful for developing purposes i.e. to show deployment kind, build type or version. Supports raster images usually png-s and vector images (using <a href='https://xmlgraphics.apache.org/batik/'>Apache Batik</a>).
 
 ## How to add?
-1. Add buildscript dependency: ```classpath 'me.surzhenko.rodion:tape:1.0.0'```
+1. Add buildscript dependency: ```classpath 'me.surzhenko.rodion:tape:1.1.0'```
 2. Apply plugin: ```apply plugin: 'icon-tape'```
 
 ## How to use?
