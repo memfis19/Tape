@@ -1,5 +1,6 @@
 # Tape
 [ ![Download](https://api.bintray.com/packages/m-e-m-f-i-s/io.github.memfis19/tape/images/download.svg) ](https://bintray.com/m-e-m-f-i-s/io.github.memfis19/tape/_latestVersion)
+[![Build Status](https://travis-ci.org/memfis19/Tape.svg?branch=master)](https://travis-ci.org/memfis19/Tape)
 
 Plugin for android app to modify app icon. Useful for developing purposes i.e. to show deployment kind, build type or version. Supports raster images usually png-s and vector images (using <a href='https://xmlgraphics.apache.org/batik/'>Apache Batik</a>).
 
